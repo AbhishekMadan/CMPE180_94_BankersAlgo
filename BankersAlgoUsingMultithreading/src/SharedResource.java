@@ -68,7 +68,7 @@ public class SharedResource {
 						work[i]+=client[index].getClientAllocation()[i];
 					}
 					flag[index]=true;
-					sequence +=index+ ((streak<client.length-1)?" -> ":".");
+					sequence +=(index+1)+ " -> ";
 					index = (index+1)%client.length;
 					streak=0;
 			}else {
@@ -114,10 +114,10 @@ public class SharedResource {
 		System.out.print("\n");
 	}
 	
-	public void generateClientRequest (int client){
+	public synchronized void generateClientRequest (int client){
 		do{
             for(int i=0;i<Bank.RESOURCE;i++)                       
-            request[i]=select.nextInt(1+Bank.getInstance().getCustomer(client).getClientNeed()[i]);
+            request[i]=select.nextInt(1+Math.min(available[i],Bank.getInstance().getCustomer(client).getClientNeed()[i]));
         }while(request[0] == 0 && request[1] == 0 && request[2] == 0);
 		System.out.println("Request from client "+(client+1)+" for resource ["
 				+request[0]+"  "+request[1]+"  "+request[2]+" ]");
